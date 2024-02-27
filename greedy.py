@@ -1,5 +1,8 @@
 import sys, csv, json, time
 
+# busca entre los elementos candidatos (candidates) para encontrar el que aparece 
+# con mayor frecuencia en los subconjuntos que aún no han sido "golpeados" (non_hit)
+# El elemento seleccionado se elimina de los candidatos, ya que será agregado al conjunto golpeador.
 def next_candidate(non_hit, candidates):
     """
     Entrada
@@ -21,6 +24,7 @@ def next_candidate(non_hit, candidates):
     candidates.remove(candidate) # O(n)
     return candidate # ==> O(mn²)
 
+# actualiza el conjunto de subconjuntos no golpeados (non_hit) eliminando aquellos que contienen al candidato seleccionado.
 def hit_sets(non_hit, candidate):
     """
     Entrada
@@ -34,7 +38,7 @@ def hit_sets(non_hit, candidate):
             non_hit.remove(s) # O(n)
     return non_hit # => O(mn²)
 
-
+# Verifica si el conjunto actual C es un conjunto golpeador para todos los subconjuntos en B.
 def is_solution(B, C):  
     """
     Indica si C es hitting-set de B
@@ -44,6 +48,10 @@ def is_solution(B, C):
             return False 
     return True  # ==> O(mn)
 
+# Intenta construir un conjunto golpeador utilizando un enfoque greedy. 
+# Selecciona el mejor candidato utilizando next_candidate, 
+# actualiza los subconjuntos no golpeados con hit_sets, 
+# y repite este proceso hasta encontrar una solución o hasta alcanzar el tamaño máximo k.
 def hsp(A, B, k):
     C = set()
     non_hit = B.copy()
