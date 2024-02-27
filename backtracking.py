@@ -3,10 +3,7 @@ import sys, csv, json, time
 # Verifica si el conjunto C es una solución válida al problema de Hitting Set.
 # Una solución es válida si para cada subconjunto b en B, C contiene al menos un elemento de b.
 def is_solution(B, C):    
-    for b in B:
-        if len(C.intersection(b)) == 0:
-            return False 
-    return True 
+    return all(len(C.intersection(b)) > 0 for b in B)
 
 # Implementa el algoritmo de backtracking para encontrar una solución al problema de Hitting Set.
 # A: conjunto universal de elementos
@@ -16,19 +13,18 @@ def is_solution(B, C):
 # Retorna un hitting set si encuentra una solución, o un conjunto vacío en caso contrario.
 def backtracking(A, B, C, k):
     if len(C) > k:
-        return set()
-
+        return None
     if is_solution(B, C):
         return C
     
-    resto = A - C
-    for elem in resto:
-        copia = C.copy()
-        copia.add(elem)
-        resultado = backtracking(A, B, copia, k)
-        if len(resultado) > 0:
+    for elem in A - C:
+        # Poda: Si agregar el elemento actual a C no contribuye a la solución, saltarlo.
+        if all(elem not in b for b in B):
+            continue
+        resultado = backtracking(A, B, C | {elem}, k)
+        if resultado:
             return resultado
-    return set()
+    return None
 
 # Función principal para resolver el problema de Hitting Set.
 # Intenta encontrar una solución incrementando gradualmente el tamaño de k hasta un límite.
@@ -36,35 +32,9 @@ def backtracking(A, B, C, k):
 def hsp(A, B, k):
     for i in range(k+1):
         r = backtracking(A, B, set(), i)
-        if r:
+        if r is not None:
             return r
     return None
-
-# Carga datos desde un archivo CSV y los devuelve como una lista de filas.
-def load(filename):
-    with open(filename) as f:
-        reader = csv.reader(f)
-        rows = []
-        for row in reader:
-            rows.append(row)
-    return rows
-
-# Construye el conjunto universal A y la colección de subconjuntos B a partir de las filas del CSV.
-def build_sets(rows):
-    A = set()
-    B = set()
-    for row in rows:
-        b = frozenset(row)
-        B.add(b)
-        A = A.union(b)
-    return A, B
-
-# def main():
-#     filename = sys.argv[1]
-#     rows = load(filename)
-#     A, B = build_sets(rows)    
-#     r = hsp(A, B, len(A))
-#     print(f"Resultado: {r}")
 
 # Carga un archivo JSON y devuelve su contenido.
 def load_json(filename):
@@ -73,39 +43,35 @@ def load_json(filename):
 
 # Guarda los resultados de la exportación en un archivo CSV con formato específico.
 def save_export(export):
-    with open('./export-backtracking.csv', 'w+') as f:
+    with open('export-backtracking.csv', 'w', newline='') as f:
         writer = csv.writer(f)
-        writer.writerow(['n', 'len', 'time'])
-        for row in export:
-            writer.writerow(row)
+        writer.writerow(['m', 'len', 'time'])
+        writer.writerows(export_data)
 
 # Carga los datos
 # Ejecuta el algoritmo de backtracking y guarda los resultados.
 # Los datos de entrada se esperan en formato JSON
 # Los resultados se exportan a un archivo CSV.
 def main():
-    filename = sys.argv[1]
-    # rows = load(filename)
-    # A, B = build_sets(rows)   
+    if len(sys.argv) < 2:
+        print("Usage: python script.py data.json")
+        sys.exit(1)
+    
+    filename = sys.argv[1] 
     data = load_json(filename)
-    export = []
+    export_data = []
 
     for d in data:
-        try:
-            start = time.time()
-            B = { frozenset(b) for b in d['B'] }
-            r = hsp(set(d['A']), B, len(d['A']))
-            end = time.time()
-            lap = end - start
-            export.append([d['m'], len(r), lap])
-            print([d['m'], len(r), lap])
-        except TypeError as e:
-            print(e)
-            print(d)
-            raise e
-        
-    print(export)
-    save_export(export)
+        A = set(d['A'])
+        B = {frozenset(b) for b in d['B']}
+        start = time.time()
+        r = hsp(A, B, len(A))
+        end = time.time()
+        if r is not None:
+            export_data.append([d['m'], len(r), end - start])
+    
+    save_export(export_data)
+    print("Export completed successfully.")
 
-
-main()
+if __name__ == "__main__":
+    main()
