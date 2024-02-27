@@ -1,1 +1,2 @@
-# tp3-tda
+# Trabajo Práctico 3: Problemas NP-Completos
+El presente trabajo busca evaluar el desarrollo y análisis de un algoritmo de Backtracking para resolver un Problema NP-Completo, así como el análisis de posibles aproximaciones. 
