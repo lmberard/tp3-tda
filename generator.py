@@ -18,12 +18,12 @@ def generate_simple(m):
 
 def generate(m):
     values = range(m)
-    set_amout = random.randint(2, m)
+    set_amout = m
     sets = []
     
     for s in range(set_amout):
-        k = random.randint(1, m//2 + 2)
-        new_set = random.sample(values, k=k)
+        k = random.randint(1, m//4 + 2)
+        new_set = random.sample(values, k=m//4 + 2)
         sets.append(sorted(new_set))
 
     sample = {
@@ -43,8 +43,8 @@ def main():
     FILENAME = sys.argv[2]
     data = []
 
-    for i in range(2, MAX+1):
-        data.append(generate_simple(i))
+    for i in range(5, MAX+1):
+        data.append(generate(i))
     save(FILENAME, data)
 
 main()
