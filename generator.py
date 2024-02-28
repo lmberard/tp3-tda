@@ -1,5 +1,4 @@
 import json
-import pprint
 import random 
 import sys
 
@@ -22,7 +21,6 @@ def generate(m):
     sets = []
     
     for s in range(set_amout):
-        k = random.randint(1, m//4 + 2)
         new_set = random.sample(values, k=m//4 + 2)
         sets.append(sorted(new_set))
 
