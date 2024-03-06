@@ -61,6 +61,26 @@ def bfs(A, B):
     q = deque()
     q.append((A, B, frozenset(), set()))
     return bfs_rec(q)
+
+def bfs_iter(A, B):
+    q = deque()
+    C = frozenset()
+    q.append(C)
+    visitados = set()
+
+    while q:
+        C = q.popleft()
+        if C in visitados:
+            continue
+        visitados.add(C)
+
+        if es_solucion(B, C):
+            return C
+
+        restos = A - C
+        restos -= descartar_ya_matcheados(B, C)
+        for resto in restos:
+            q.append(C.union(frozenset([resto])))    
     
 def load(filename):
     with open(filename) as f:
@@ -83,7 +103,7 @@ def main():
     filename = sys.argv[1]
     rows = load(filename)
     A, B = build_sets(rows)    
-    C = bfs(A, B)
+    C = bfs_iter(A, B)
     print(f"len: {len(C)} .... solucion: {C}")
 
 main()
