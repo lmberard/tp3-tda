@@ -19,9 +19,10 @@ def descartar_ya_matcheados(B, C):
     
     elementos_matcheados = flat_set(b_matcheados)
     elementos_no_matcheados = flat_set(b_no_matcheados)
-    descartar = elementos_matcheados - elementos_no_matcheados  
-    return descartar       
+    print(elementos_matcheados - elementos_no_matcheados)
+    return elementos_matcheados - elementos_no_matcheados        
     
+
 def filtrar_mayores(A, C):
     if len(C) == 0:
         return A
@@ -57,7 +58,6 @@ def backtracking(A, B, C, k):
 
 def hsp(A, B, k):
     for i in range(k+1):
-        print(f"\n\ni: {i}")
         r = backtracking(A, B, set(), i)
         if r:
             return r
