@@ -1,5 +1,37 @@
 import sys, csv, json, time
 
+def flat_set(S):
+    r = set()
+    for s in S:
+        for e in s:
+            r.add(e)
+    return r
+
+def descartar_ya_matcheados(B, C):
+    b_matcheados = set()
+    b_no_matcheados = set()
+    
+    for b in B:
+        if len(C.intersection(b)) != 0:
+            b_matcheados.add(b)
+        else:
+            b_no_matcheados.add(b)
+    
+    elementos_matcheados = flat_set(b_matcheados)
+    elementos_no_matcheados = flat_set(b_no_matcheados)
+    descartar = elementos_matcheados - elementos_no_matcheados  
+    return descartar       
+    
+def filtrar_mayores(A, C):
+    if len(C) == 0:
+        return A
+    
+    r = set()
+    for a in A:
+        if a > max(C): 
+            r.add(a)
+    return r
+
 def is_solution(B, C):    
     for b in B:
         if len(C.intersection(b)) == 0:
@@ -13,7 +45,8 @@ def backtracking(A, B, C, k):
     if is_solution(B, C):
         return C
     
-    resto = A - C
+    resto = filtrar_mayores(A, C)
+    resto -= descartar_ya_matcheados(B, C)
     for elem in resto:
         copia = C.copy()
         copia.add(elem)
@@ -24,6 +57,7 @@ def backtracking(A, B, C, k):
 
 def hsp(A, B, k):
     for i in range(k+1):
+        print(f"\n\ni: {i}")
         r = backtracking(A, B, set(), i)
         if r:
             return r
@@ -46,12 +80,13 @@ def build_sets(rows):
         A = A.union(b)
     return A, B
 
-# def main():
-#     filename = sys.argv[1]
-#     rows = load(filename)
-#     A, B = build_sets(rows)    
-#     r = hsp(A, B, len(A))
-#     print(f"Resultado: {r}")
+def main():
+    filename = sys.argv[1]
+    rows = load(filename)
+    A, B = build_sets(rows)    
+    r = hsp(A, B, len(A))
+    print(f"Resultado: {r}")
+    print(f"len(): {len(r)}")
 
 def load_json(filename):
     with open(filename) as f:
@@ -64,29 +99,29 @@ def save_export(export):
         for row in export:
             writer.writerow(row)
 
-def main():
-    filename = sys.argv[1]
-    # rows = load(filename)
-    # A, B = build_sets(rows)   
-    data = load_json(filename)
-    export = []
+# def main():
+#     filename = sys.argv[1]
+#     # rows = load(filename)
+#     # A, B = build_sets(rows)   
+#     data = load_json(filename)
+#     export = []
 
-    for d in data:
-        try:
-            start = time.time()
-            B = { frozenset(b) for b in d['B'] }
-            r = hsp(set(d['A']), B, len(d['A']))
-            end = time.time()
-            lap = end - start
-            export.append([d['m'], len(r), lap])
-            print([d['m'], len(r), lap])
-        except TypeError as e:
-            print(e)
-            print(d)
-            raise e
+#     for d in data:
+#         try:
+#             start = time.time()
+#             B = { frozenset(b) for b in d['B'] }
+#             r = hsp(set(d['A']), B, len(d['A']))
+#             end = time.time()
+#             lap = end - start
+#             export.append([d['m'], len(r), lap])
+#             print([d['m'], len(r), lap])
+#         except TypeError as e:
+#             print(e)
+#             print(d)
+#             raise e
         
-    print(export)
-    save_export(export)
+#     print(export)
+#     save_export(export)
 
 
 main()
