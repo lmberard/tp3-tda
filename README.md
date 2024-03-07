@@ -24,22 +24,63 @@ python generator.py <N> <output-filename>
 python generator.py 50 data-50.json
 ```
 
-## Algoritmo Greedy
+## Algoritmos
 
-Imprime por pantalla `[N, largo-set, tiempo-transcurrido]` y lo guarda un archivo `export-greddy.csv`
+Los siguientes algoritmos imprimen por pantalla el resultado en formato CSV separado por punto y coma 
 
-```bash
-python greedy.py <filename>
-# Ejemplo
-python greedy.py data-50.json
+Formato impreso
+Donde
+- n: tamaño del conjunto A
+- len: Largo de la solución
+- C: Conjunto solucion
+- lapse: Tiempo transcurrido en segundos
+
+```csv
+n;len;C;lapse
+5;2;{0, 1};4.0531158447265625e-05
+6;2;{1, 4};3.0040740966796875e-05
 ```
 
-## Algoritmo Backtracking
+### Algoritmo Greedy
+
+Permite leer tanto los datos de la catedra como los generados por generator.py
+
+Ejecucion
+
+```bash
+# Modo 
+python greedy.py --csv <filename.csv>
+python greddy.py --json <filename.json>
+
+# Catedra
+python greedy.py --csv data/5.txt
+
+# JSON
+python greedy.py --json data-50.json
+```
+
+### Algoritmo Backtracking
 
 Imprime por pantalla `[N, largo-set, tiempo-transcurrido]` y loguarda un archivo `export-backtracking.csv`.
 
 ```bash
-python backtracking.py <filename>
-# Ejemplo
-python backtracking.py data-50.json
+# Modo 
+python backtracking-reentrega.py --csv <filename.csv>
+python backtracking-reentrega.py --json <filename.json>
+
+# Catedra
+python backtracking-reentrega.py --csv data/5.txt
+
+# JSON
+python backtracking-reentrega.py --json data-50.json
+```
+
+### Ejemplo
+
+Para guardar en un archivo, se recomienda redirigir el output
+
+```bash
+# Con tee para imprimir el texto por pantalla tambien
+python backtracking-reentrega.py --json data-50.json | tee export-backtracking.csv
+python greedy.py --json data-50.json | tee export-greedy.csv
 ```
