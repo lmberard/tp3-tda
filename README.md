@@ -50,7 +50,7 @@ Ejecucion
 ```bash
 # Modo 
 python greedy.py --csv <filename.csv>
-python greddy.py --json <filename.json>
+python greedy.py --json <filename.json>
 
 # Catedra
 python greedy.py --csv data/5.txt
