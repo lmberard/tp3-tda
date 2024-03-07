@@ -43,13 +43,13 @@ n;len;C;lapse
 
 ### Algoritmo Greedy
 
-Permite leer tanto los datos de la catedra como los generados por generator.py
+Permite leer tanto los datos de la catedra (txt) como los generados por generator.py (json)
 
 Ejecucion
 
 ```bash
 # Modo 
-python greedy.py --txt <filename.csv>
+python greedy.py --txt <filename.txt>
 python greedy.py --json <filename.json>
 
 # Catedra
@@ -63,7 +63,7 @@ python greedy.py --json data-50.json
 
 ```bash
 # Modo 
-python backtracking-reentrega.py --txt <filename.csv>
+python backtracking-reentrega.py --txt <filename.txt>
 python backtracking-reentrega.py --json <filename.json>
 
 # Catedra
