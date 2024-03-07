@@ -49,11 +49,11 @@ Ejecucion
 
 ```bash
 # Modo 
-python greedy.py --csv <filename.csv>
+python greedy.py --txt <filename.csv>
 python greedy.py --json <filename.json>
 
 # Catedra
-python greedy.py --csv data/5.txt
+python greedy.py --txt data/5.txt
 
 # JSON
 python greedy.py --json data-50.json
@@ -61,15 +61,13 @@ python greedy.py --json data-50.json
 
 ### Algoritmo Backtracking
 
-Imprime por pantalla `[N, largo-set, tiempo-transcurrido]` y loguarda un archivo `export-backtracking.csv`.
-
 ```bash
 # Modo 
-python backtracking-reentrega.py --csv <filename.csv>
+python backtracking-reentrega.py --txt <filename.csv>
 python backtracking-reentrega.py --json <filename.json>
 
 # Catedra
-python backtracking-reentrega.py --csv data/5.txt
+python backtracking-reentrega.py --txt data/5.txt
 
 # JSON
 python backtracking-reentrega.py --json data-50.json

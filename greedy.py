@@ -75,7 +75,7 @@ def build_sets(rows):
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--json', help='Archivo json exportado por generator.py')
-    parser.add_argument('--csv', help='Archivos csv usados en clase')
+    parser.add_argument('--txt', help='Archivos csv usados en clase')
     return parser.parse_args()
 
 def load_json(filename):
@@ -96,7 +96,7 @@ def run_json(filename):
         except TypeError as e:
             raise e
 
-def run_csv(filename):
+def run_txt(filename):
     rows = load(filename)
     A, B = build_sets(rows) 
     start = time.time()
@@ -110,8 +110,8 @@ def main():
     print("n;len;C;lapse", flush=True)
     if args.json:
         run_json(args.json)
-    elif args.csv:
-        run_csv(args.csv)
+    elif args.txt:
+        run_txt(args.txt)
     else:
         raise RuntimeError('No se especificó formato de archivos')
 
