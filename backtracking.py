@@ -99,29 +99,29 @@ def save_export(export):
         for row in export:
             writer.writerow(row)
 
-# def main():
-#     filename = sys.argv[1]
-#     # rows = load(filename)
-#     # A, B = build_sets(rows)   
-#     data = load_json(filename)
-#     export = []
+def main():
+    filename = sys.argv[1]
+    # rows = load(filename)
+    # A, B = build_sets(rows)   
+    data = load_json(filename)
+    export = []
 
-#     for d in data:
-#         try:
-#             start = time.time()
-#             B = { frozenset(b) for b in d['B'] }
-#             r = hsp(set(d['A']), B, len(d['A']))
-#             end = time.time()
-#             lap = end - start
-#             export.append([d['m'], len(r), lap])
-#             print([d['m'], len(r), lap])
-#         except TypeError as e:
-#             print(e)
-#             print(d)
-#             raise e
+    for d in data:
+        try:
+            start = time.time()
+            B = { frozenset(b) for b in d['B'] }
+            r = hsp(set(d['A']), B, len(d['A']))
+            end = time.time()
+            lap = end - start
+            export.append([d['m'], len(r), lap])
+            print([d['m'], len(r), lap])
+        except TypeError as e:
+            print(e)
+            print(d)
+            raise e
         
-#     print(export)
-#     save_export(export)
+    print(export)
+    save_export(export)
 
 
 main()

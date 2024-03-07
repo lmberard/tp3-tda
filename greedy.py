@@ -1,4 +1,4 @@
-import sys, csv, json, time
+import sys, csv, json, time, argparse
 
 def next_candidate(non_hit, candidates):
     """
@@ -72,31 +72,47 @@ def build_sets(rows):
         A = A.union(b)
     return A, B
 
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--json', help='Archivo json exportado por generator.py')
+    parser.add_argument('--csv', help='Archivos csv usados en clase')
+    return parser.parse_args()
+
 def load_json(filename):
     with open(filename) as f:
         return json.load(f)
     
-def save_export(export):
-    with open('./export-greedy.csv', 'w+') as f:
-        writer = csv.writer(f)
-        writer.writerow(['n', 'len', 'time'])
-        for row in export:
-            writer.writerow(row)
-
-def main():
-    filename = sys.argv[1]
-    # rows = load(filename)
-    # A, B = build_sets(rows)   
+def run_json(filename):
     data = load_json(filename)
-    export = []
 
     for d in data:
-        start = time.time()
-        r = hsp(d['A'], d['B'], len(d['A']))
-        end = time.time()
-        lap = end - start
-        export.append([d['m'], len(r), lap])
-        
-    print(export)
-    save_export(export)
+        try:
+            B = { frozenset(b) for b in d['B'] }
+            start = time.time()
+            C = hsp(set(d['A']), B, len(d['A']))
+            end = time.time()
+            lapse = end - start
+            print(f"{d['m']};{len(C)};{C};{lapse}", flush=True)
+        except TypeError as e:
+            raise e
+
+def run_csv(filename):
+    rows = load(filename)
+    A, B = build_sets(rows) 
+    start = time.time()
+    C = hsp(A, B, len(A))
+    end = time.time()
+    lapse = end - start
+    print(f"1;{len(C)};{C};{lapse}", flush=True)
+
+def main():
+    args = parse_args()
+    print("n;len;C;lapse", flush=True)
+    if args.json:
+        run_json(args.json)
+    elif args.csv:
+        run_csv(args.csv)
+    else:
+        raise RuntimeError('No se especificó formato de archivos')
+
 main()
